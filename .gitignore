@@ -1,0 +1,16 @@
+**/node_modules/
+**/.next/
+**/out/
+ermia_strapi2/dist/
+ermia_strapi2/build/
+ermia_strapi2/.tmp/
+ermia_strapi2/.strapi/
+**/.env
+**/.env.*
+!**/.env.example
+**/npm-debug.log*
+**/yarn-debug.log*
+**/pnpm-debug.log*
+.DS_Store
+*.tsbuildinfo
+*.rar
