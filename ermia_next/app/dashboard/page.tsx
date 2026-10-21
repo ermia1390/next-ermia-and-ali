@@ -21,12 +21,12 @@ export default async function dashbourd() {
                     {products.map((product)=>(
                         <article className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg transition duration-300 hover:-translate-y-1 hover:border-yellow-600/50 hover:shadow-yellow-900/10" key={product.id}>
                             {product.image && (
-    <img
-        src={`${process.env.STRAPI_URL}${product.image.url}`}
-        alt={product.image.alternativeText || product.title}
-        className="mb-5 h-48 w-full rounded-xl object-cover"
-    />
-)}
+                                <img
+                                    src={`${process.env.STRAPI_URL}${product.image.url}`}
+                                    alt={product.image.alternativeText || product.title}
+                                    className="mb-5 h-48 w-full rounded-xl object-cover"
+                                />
+                            )}
                             <h3 className="mb-3 text-xl font-bold text-yellow-500">{product.title}</h3>
                             <p className="mb-5 leading-7 text-zinc-400">{product.description}</p>
                             <p className="text-lg font-bold text-white">toman{product.price}</p>

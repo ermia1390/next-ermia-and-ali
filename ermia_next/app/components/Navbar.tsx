@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import Link from "next/link";
 import Logoutbutton from "./Logoutbutton";
+import Cartlink from "./Cartlink";
 
 export default async function Navbar() {
     const session = await auth()
@@ -18,6 +19,7 @@ export default async function Navbar() {
                 {session ? (
                     <>
                     <Link className="font-medium text-zinc-300 transition hover:text-yellow-500" href="dashboard">Dashboard</Link>
+                    <Cartlink/>
                     <span className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300">{session.user.name}</span>
                     <Logoutbutton/>
                     </>
