@@ -3,23 +3,18 @@
 import { usecreatecontext } from "@/context/CartContext";
 
 export default function AddToCartButton({
-  productId,
+    productId,
 }: {
-  productId: number;
+    productId: number;
 }) {
-  const { handleincproduct, getproductqty } = usecreatecontext();
+    const { handleincproduct } = usecreatecontext();
 
-  const qty = getproductqty(productId);
-
-  return (
-    <button
-      type="button"
-      onClick={() => handleincproduct(productId)}
-      className="w-full rounded-lg bg-yellow-500 px-4 py-3 font-bold text-black transition hover:bg-yellow-400"
-    >
-      {qty > 0
-        ?`  dobare afzodan  (tedad dar sabad kharid: ${qty})`
-        : "افزودن به سبد خرید"}
-    </button>
-  );
+    return (
+        <button
+            onClick={() => handleincproduct(productId)}
+            className="mt-3 w-full rounded-lg bg-yellow-500 p-2 font-bold text-black transition hover:bg-yellow-400"
+        >
+            اضافه کردن به سبد خرید
+        </button>
+    );
 }
