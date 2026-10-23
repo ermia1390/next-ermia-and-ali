@@ -29,6 +29,18 @@
         "videos",
         "audios"
       ]
+    },
+    "brand": {
+      "type": "enumeration",
+      "enum": [
+        "Xiaomi",
+        "Samsung",
+        "Apple"
+      ]
+    },
+    "isPopular": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
