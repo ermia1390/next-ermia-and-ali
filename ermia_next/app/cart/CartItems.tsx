@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import type { product } from "@/lib/products";
 import { usecreatecontext } from "@/context/CartContext";
 
@@ -16,6 +17,13 @@ export default function CartItems({
         handleincproduct,
         handledecproduct,
     } = usecreatecontext();
+
+    const [coupon, setCoupon] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState("");
+    const [discountPercent, setDiscountPercent] = useState(0);
+    const [couponMessage, setCouponMessage] = useState("");
+    const [couponError, setCouponError] = useState(false);
+    const [loadingCoupon, setLoadingCoupon] = useState(false);
 
     const items = cartitem
         .map((cart) => ({
@@ -35,15 +43,72 @@ export default function CartItems({
         0
     );
 
+    const discountAmount = Math.round(
+        totalPrice * discountPercent / 100
+    );
+
+    const finalPrice = totalPrice - discountAmount;
+
+    async function applyCoupon() {
+        if (!coupon.trim()) {
+            setAppliedCoupon("");
+            setDiscountPercent(0);
+            setCouponError(true);
+            setCouponMessage("Please enter a coupon code.");
+            return;
+        }
+
+        setLoadingCoupon(true);
+        setCouponMessage("");
+
+        try {
+            const response = await fetch("/api/coupons", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    code: coupon.trim().toUpperCase(),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setAppliedCoupon("");
+                setDiscountPercent(0);
+                setCouponError(true);
+                setCouponMessage(
+                    data.message || "Invalid or expired coupon code."
+                );
+                return;
+            }
+
+            setAppliedCoupon(data.code);
+            setDiscountPercent(data.discountPercent);
+            setCouponError(false);
+            setCouponMessage("Coupon applied successfully!");
+        } catch {
+            setAppliedCoupon("");
+            setDiscountPercent(0);
+            setCouponError(true);
+            setCouponMessage(
+                "Unable to validate the coupon. Please try again."
+            );
+        } finally {
+            setLoadingCoupon(false);
+        }
+    }
+
     if (items.length === 0) {
         return (
             <div className="py-10 text-center">
                 <h2 className="text-2xl font-bold text-yellow-500">
-                    سبد خرید شما خالی است
+                    Your Cart Is Empty
                 </h2>
 
                 <p className="mt-3 text-zinc-400">
-                    هنوز محصولی به سبد خرید اضافه نکرده‌اید.
+                    You haven't added any products to your cart yet.
                 </p>
             </div>
         );
@@ -52,11 +117,11 @@ export default function CartItems({
     return (
         <div>
             <h1 className="mb-6 text-3xl font-bold text-yellow-500">
-                سبد خرید من
+                My Shopping Cart
             </h1>
 
             <p className="mb-5 text-zinc-300">
-                تعداد کل محصولات: {totalQty}
+                Total Items: {totalQty}
             </p>
 
             <div className="space-y-4">
@@ -89,11 +154,11 @@ export default function CartItems({
                                 </h2>
 
                                 <p className="mt-1 text-zinc-300">
-                                    قیمت: {cartProduct.price} تومان
+                                    Price: {cartProduct.price.toLocaleString()} Toman
                                 </p>
 
                                 <p className="mt-1 text-zinc-400">
-                                    جمع این محصول: {cartProduct.price * qty} تومان
+                                    Item Total: {(cartProduct.price * qty).toLocaleString()} Toman
                                 </p>
                             </div>
 
@@ -111,9 +176,7 @@ export default function CartItems({
                                 <span>{qty}</span>
 
                                 <button
-
-
-type="button"
+                                    type="button"
                                     onClick={() =>
                                         handleincproduct(cartProduct.id)
                                     }
@@ -127,9 +190,53 @@ type="button"
                 })}
             </div>
 
-            <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-900 p-5 text-left">
-                <p className="text-xl font-bold text-yellow-500">
-                    مبلغ کل: {totalPrice} تومان
+            <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-900 p-5">
+                <h2 className="mb-3 text-lg font-bold text-white">
+                    Coupon Code
+                </h2>
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                    <input
+                        type="text"
+                        value={coupon}
+                        onChange={(e) => setCoupon(e.target.value)}
+                        placeholder="Enter coupon code"
+                        className="min-w-0 flex-1 rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                    />
+
+                    <button
+                        type="button"
+                        onClick={applyCoupon}
+                        disabled={loadingCoupon}
+                        className="rounded-lg bg-yellow-500 px-5 py-3 font-bold text-black hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        {loadingCoupon ? "Checking..." : "Apply Coupon"}
+                    </button>
+                </div>
+
+                {couponMessage && (
+                    <p
+                        className={`mt-3 text-sm ${
+                            couponError ? "text-red-400" : "text-green-400"
+                        }`}
+                    >
+                        {couponMessage}
+                    </p>
+                )}
+            </div>
+
+            <div className="mt-6 space-y-3 rounded-xl border border-zinc-800 bg-zinc-900 p-5 text-left">
+                <p className="text-zinc-300">
+                    Subtotal: {totalPrice.toLocaleString()} Toman
+                </p>
+
+                <p className="text-green-400">
+                    Discount {appliedCoupon ? `(${appliedCoupon} - ${discountPercent}%)` : ""}: -
+                    {discountAmount.toLocaleString()} Toman
+                </p>
+
+                <p className="border-t border-zinc-700 pt-3 text-xl font-bold text-yellow-500">
+                    Total Price: {finalPrice.toLocaleString()} Toman
                 </p>
             </div>
         </div>

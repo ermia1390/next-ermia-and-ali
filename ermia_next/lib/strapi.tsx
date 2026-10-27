@@ -1,36 +1,31 @@
 const STRAPI_URL = process.env.STRAPI_URL;
 
 if (!STRAPI_URL) {
-throw new Error("STRAPI_URL در فایل .env تعریف نشده است.");
+    throw new Error("The server configuration is incomplete.");
 }
 
 export async function strapifetch<T>(
-path: string,
-token?: string,
-options: RequestInit = {}
+    path: string,
+    token?: string,
+    options: RequestInit = {}
 ): Promise<T> {
-const headers = new Headers(options.headers);
+    const headers = new Headers(options.headers);
 
-headers.set("Content-Type", "application/json");
+    headers.set("Content-Type", "application/json");
 
-if (token) {
-headers.set("Authorization", "Bearer ${token}");
-}
+    if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+    }
 
-const response = await fetch(`${STRAPI_URL}${path}`, {
-...options,
-headers,
-cache: "no-store",
-});
+    const response = await fetch(`${STRAPI_URL}${path}`, {
+        ...options,
+        headers,
+        cache: "no-store",
+    });
 
-if (!response.ok) {
-const details = await response.text();
+    if (!response.ok) {
+        throw new Error("We couldn't complete your request. Please try again later.");
+    }
 
-throw new Error(
- `  Strapi request failed: ${response.status} ${response.statusText}. ${details}`
-);
-
-}
-
-return (await response.json()) as T;
+    return (await response.json()) as T;
 }
