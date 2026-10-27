@@ -32,7 +32,7 @@ export default function Registerform(){
             const data=await response.json()
             if(!response.ok){
                 seterror(
-                    data.message || "sabte name tamom shod",
+                    data.message || "Registration completed successfully.",
 
                 )
                 return
@@ -52,7 +52,7 @@ export default function Registerform(){
             router.refresh()
         }
         catch{
-            seterror("khata rokh dadae")
+            seterror("Something went wrong. Please try again later.")
         }
         finally{
             setloading(false)
@@ -78,7 +78,7 @@ export default function Registerform(){
             {error  &&(
                 <p className="mb-5 rounded-xl border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-400">{error}</p>
             )}
-            <button type="submit" disabled={loading} className="w-full rounded-xl bg-yellow-500 px-4 py-3 font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50">{loading ?"dar hal vorod":"vorod"}</button>
+            <button type="submit" disabled={loading} className="w-full rounded-xl bg-yellow-500 px-4 py-3 font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-50">{loading ?"dar hal vorod":"Sign Up"}</button>
         </form>
     )
 

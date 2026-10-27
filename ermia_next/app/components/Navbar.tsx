@@ -25,6 +25,7 @@ export default async function Navbar() {
                     </>
                 ):(
                     <>
+                    <Cartlink/>
                     <Link className="font-medium text-zinc-300 transition hover:text-yellow-500" href="/login">login</Link>
                     <Link className="rounded-lg bg-yellow-500 px-4 py-2 font-bold text-black transition hover:bg-yellow-400" href="/register">register</Link>
                     </>

@@ -1,5 +1,6 @@
 import type { product } from "@/lib/products";
 import AddToCartButton from "./AddToCartButton";
+import Link from "next/link";
 
 const STRAPI_URL = process.env.STRAPI_URL;
 
@@ -22,7 +23,7 @@ export default function ProductCard({
         />
       ) : (
         <div className="mb-4 flex h-48 w-full items-center justify-center rounded-xl bg-zinc-800 text-zinc-400">
-          تصویر موجود نیست
+          Image Not Available
         </div>
       )}
 
@@ -35,10 +36,15 @@ export default function ProductCard({
       </p>
 
       <p className="mb-4 text-lg font-bold text-white">
-        {product.price} تومان
+        {product.price} Toman
       </p>
 
-      <AddToCartButton productId={product.id} />
+      <Link
+        href={`/products/${product.documentId}`}
+        className="mb-4 block rounded-lg border border-zinc-700 px-4 py-3 text-center font-bold text-white transition hover:border-yellow-400 hover:text-yellow-400"
+      >
+        View Details
+      </Link>
     </article>
   );
 }

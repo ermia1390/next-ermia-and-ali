@@ -1,3 +1,4 @@
+
 import { auth } from "@/auth";
 import { getproducts } from "@/lib/products";
 import CartItems from "./CartItems";
@@ -8,7 +9,9 @@ export default async function CartPage() {
     if (!session?.user?.strapiToken) {
         return (
             <main className="min-h-screen bg-zinc-950 p-8 text-white">
-                <p>برای مشاهده سبد خرید ابتدا وارد حساب کاربری شوید.</p>
+                <p>
+                    Please sign in to view your shopping cart.
+                </p>
             </main>
         );
     }

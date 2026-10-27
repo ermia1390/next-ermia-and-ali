@@ -27,3 +27,10 @@ export async function getproducts() {
 
   return response.data;
 }
+export async function getproductbyid(documentId: string) {
+  const response = await strapifetch<{ data: product }>(
+    `/api/products/${documentId}?populate=image`
+  );
+
+  return response.data;
+}

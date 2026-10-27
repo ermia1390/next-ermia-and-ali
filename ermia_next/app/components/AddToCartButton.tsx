@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usecreatecontext } from "@/context/CartContext";
@@ -14,7 +15,7 @@ export default function AddToCartButton({
             onClick={() => handleincproduct(productId)}
             className="mt-3 w-full rounded-lg bg-yellow-500 p-2 font-bold text-black transition hover:bg-yellow-400"
         >
-            اضافه کردن به سبد خرید
+            Add to Cart
         </button>
     );
 }

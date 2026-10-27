@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -51,10 +52,10 @@ export default function ProductList({
     useState<BrandFilter>("all");
 
   const filters: { label: string; value: BrandFilter }[] = [
-    { label: "همه محصولات", value: "all" },
-    { label: "شیائومی", value: "xiaomi" },
-    { label: "سامسونگ", value: "samsung" },
-    { label: "آیفون", value: "iphone" },
+    { label: "All Products", value: "all" },
+    { label: "Xiaomi", value: "xiaomi" },
+    { label: "Samsung", value: "samsung" },
+    { label: "iPhone", value: "iphone" },
   ];
 
   const filteredProducts =
@@ -72,8 +73,7 @@ export default function ProductList({
             key={filter.value}
             type="button"
             onClick={() => setSelectedBrand(filter.value)}
-            className={`
-rounded-xl border px-5 py-3 font-bold transition ${
+            className={`rounded-xl border px-5 py-3 font-bold transition ${
               selectedBrand === filter.value
                 ? "border-yellow-400 bg-yellow-400 text-black"
                 : "border-zinc-700 bg-zinc-900 text-white hover:border-yellow-400"
@@ -86,9 +86,9 @@ rounded-xl border px-5 py-3 font-bold transition ${
 
       {filteredProducts.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center text-zinc-300">
-          محصولی برای این برند پیدا نشد.
+          No products found.
           <p className="mt-2 text-sm text-zinc-500">
-            نام برند را در عنوان یا فیلد brand محصول در Strapi وارد کن.
+            Try selecting another brand or check back later for new products.
           </p>
         </div>
       ) : (
