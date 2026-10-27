@@ -20,11 +20,10 @@ type productresponse = {
 data: product[];
 };
 
-export async function getproducts(token: string) {
-const response = await strapifetch<productresponse>(
-"/api/products?populate=image",
-token
-);
+export async function getproducts() {
+  const response = await strapifetch<productresponse>(
+    "/api/products?populate=image"
+  );
 
-return response.data;
+  return response.data;
 }
