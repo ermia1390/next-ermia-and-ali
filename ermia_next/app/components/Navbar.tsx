@@ -18,9 +18,8 @@ export default async function Navbar() {
             <div className="flex items-center gap-6">
                 {session ? (
                     <>
-                    <Link className="font-medium text-zinc-300 transition hover:text-yellow-500" href="dashboard">Dashboard</Link>
                     <Cartlink/>
-                    <span className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300">{session.user.name}</span>
+                    <Link className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm text-zinc-300 transition hover:text-yellow-500" href="dashboard">{session.user.name}</Link>
                     <Logoutbutton/>
                     </>
                 ):(

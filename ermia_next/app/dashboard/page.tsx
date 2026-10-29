@@ -1,67 +1,86 @@
+
+import Link from "next/link";
 import { auth } from "@/auth";
-import { getproducts } from "@/lib/products";
-import AddToCartButton from "../components/AddToCartButton";
+import { redirect } from "next/navigation";
 
-export default async function dashbourd() {
-    const session = await auth();
+export default async function DashboardPage() {
+  const session = await auth();
 
-    const products = await getproducts(
-        session!.user.strapiToken
-    );
+  if (!session?.user) {
+    redirect("/api/auth/signin");
+  }
 
-    return (
-        <main className="min-h-screen bg-zinc-950 px-5 py-10 text-white">
-            <div className="mx-auto max-w-6xl">
-                <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-7 shadow-xl">
-                    <h2 className="mb-2 text-3xl font-bold text-yellow-500">
-                        User Dashboard
-                    </h2>
+  return (
+    <main className="min-h-screen bg-zinc-950 px-5 py-10 text-white">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <h1 className="text-3xl font-bold">
+            Welcome, {session.user.name || "User"}!
+          </h1>
 
-                    <p className="text-zinc-400">
-                        Welcome, {session?.user?.name}
-                    </p>
-                </div>
+          <div className="mt-5 space-y-2 text-zinc-300">
+            <p>
+              <span className="font-semibold text-white">Username:</span>{" "}
+              {session.user.name || "Not available"}
+            </p>
+            <p>
+              <span className="font-semibold text-white">Email:</span>{" "}
+              {session.user.email || "Not available"}
+            </p>
+          </div>
+        </section>
+        <br />
 
-                <section>
-                    <h2 className="mb-5 text-2xl font-bold text-white">
-                        Products
-                    </h2>
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+          <h2 className="text-xl font-bold">Your Shopping Cart</h2>
+          <p className="mt-2 text-zinc-400">
+            Check the products you have added to your cart.
+          </p>
 
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        {products.map((product) => (
-                            <article
-                                className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-lg transition duration-300 hover:-translate-y-1 hover:border-yellow-600/50 hover:shadow-yellow-900/10"
-                                key={product.id}
-                            >
-                                {product.image && (
-                                    <img
-                                        src={`${process.env.STRAPI_URL}${product.image.url}`}
-                                        alt={
-                                            product.image.alternativeText ||
-                                            product.title
-                                        }
-                                        className="mb-5 h-48 w-full rounded-xl object-cover"
-                                    />
-                                )}
+          <Link
+            href="/cart"
+            className="mt-5 inline-block rounded-lg bg-yellow-500 px-5 py-3 font-semibold text-black transition hover:bg-yellow-400"
+          >
+            View Cart
+          </Link>
+        </section>
 
-                                <h3 className="mb-3 text-xl font-bold text-yellow-500">
-                                    {product.title}
-                                </h3>
+        <section>
+          <h2 className="mb-5 text-2xl font-bold">Featured Brands</h2>
 
-                                <p className="mb-5 leading-7 text-zinc-400">
-                                    {product.description}
-                                </p>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <Link
+              href="/products?brand=Samsung"
+              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center transition hover:border-yellow-500"
+            >
+              <h3 className="text-xl font-bold">Samsung</h3>
+              <p className="mt-2 text-sm text-zinc-400">
+                Explore Samsung products
+              </p>
+            </Link>
 
-                                <p className="text-lg font-bold text-white">
-                                    {product.price} Toman
-                                </p>
+            <Link
+              href="/products?brand=Xiaomi"
+              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center transition hover:border-yellow-500"
+            >
+              <h3 className="text-xl font-bold">Xiaomi</h3>
+              <p className="mt-2 text-sm text-zinc-400">
+                Explore Xiaomi products
+              </p>
+            </Link>
 
-                                <AddToCartButton productId={product.id} />
-                            </article>
-                        ))}
-                    </div>
-                </section>
-            </div>
-        </main>
-    );
+            <Link
+              href="/products?brand=Apple"
+              className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 text-center transition hover:border-yellow-500"
+            >
+              <h3 className="text-xl font-bold">Apple</h3>
+              <p className="mt-2 text-sm text-zinc-400">
+                Explore Apple products
+              </p>
+            </Link>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
 }
