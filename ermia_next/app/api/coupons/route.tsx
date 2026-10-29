@@ -1,4 +1,3 @@
-
 import { auth } from "@/auth";
 import { strapifetch } from "@/lib/strapi";
 import { NextResponse } from "next/server";
